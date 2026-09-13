@@ -1,143 +1,105 @@
 # WindowsMountTool
 
-Windows 云盘挂载向导：通过 Alist / OpenList、rclone 和 WinFsp，将 WebDAV 或其他支持的网盘服务挂载为 Windows 本地盘符。
+我做了一个面向 Windows 的云盘挂载工具，通过 Alist / OpenList、rclone 和 WinFsp，把 WebDAV 或其他支持的网盘服务挂载成 Windows 本地盘符。
 
-> 当前项目主要面向 Windows x64。程序界面保留 Tkinter 桌面向导，并提供暗色/浅色主题、驱动状态检测、多配置管理、挂载/卸载、开机自启、健康检查和关于页面。
+当前版本主要面向 Windows x64，界面使用 Python + Tkinter 编写，提供深色和浅色主题。
 
 ## 功能
 
-- 使用 Alist / OpenList 提供本机 WebDAV 服务。
-- 使用 rclone 执行 WebDAV 到本地盘符的挂载。
-- 使用 WinFsp 提供 Windows 用户态文件系统支持。
-- 支持多个挂载配置和盘符管理。
-- 支持 WebDAV 直连，以及通过 Alist/OpenList 聚合网盘。
-- 支持挂载、卸载、状态检测、日志查看和故障诊断。
-- 支持开机自启和健康检查。
-- 安装器可释放 Alist、rclone 和 WinFsp 相关资源。
-- 配置向导提供暗色/浅色主题和“关于”页面。
-<img width="1352" height="940" alt="image" src="https://github.com/user-attachments/assets/196323ab-c494-4d0e-8ca4-dfdfaeccdb72" />
-<img width="716" height="520" alt="image" src="https://github.com/user-attachments/assets/2530b419-8665-4663-a65f-93024df14919" />
+WindowsMountTool 由安装器和配置向导组成：
 
-## 下载和运行
+- 安装器负责安装程序，并提供 Alist、rclone 和 WinFsp 所需的发布资源。
+- 配置向导支持 WebDAV 直连，也支持通过 Alist / OpenList 聚合多个网盘。
+- 可以保存多个挂载方案，为每个方案设置远端地址、账号、密码、盘符和卷标。
+- 支持挂载、卸载、状态检查、日志查看、健康检查和开机自启。
+- 配置向导内置驱动状态检查、管理后台入口、主题切换和关于页面。
 
-建议从 GitHub Releases 下载正式版本。源码仓库与发布附件分开管理：本仓库只提交源码、配置模板和公开资源；正式程序及 Alist、rclone、WinFsp 等运行依赖不放入 Git 历史，而是作为 Release 附件提供。
+## 下载与运行
 
-1. 从 [Releases](https://github.com/cjm2004/WindowsMountTool/releases) 下载 `CloudMountSetup.exe`。
-2. 以普通方式启动安装器，按提示选择安装目录。
-3. 如果安装 WinFsp 后系统提示重启，请先重启 Windows。
-4. 启动安装后的“云盘挂载向导”。
-5. 按向导配置 WebDAV 或 Alist/OpenList 连接。
-6. 选择未被占用的盘符后执行挂载。
+请前往 [GitHub Releases](https://github.com/cjm2004/WindowsMountTool/releases) 下载最新版本。目前提供 `v1.0.0` 正式版。
 
-也可以直接运行 `mount_wizard.exe` 进行配置，但完整安装流程建议使用安装器。
+### 推荐方式：使用安装器
+
+1. 下载 `CloudMountSetup.exe`。
+2. 双击运行安装器，按提示选择安装目录和需要的组件。
+3. 如果安装 WinFsp 后提示重启 Windows，请先重启，再继续使用软件。
+4. 从开始菜单或安装目录启动“云盘挂载向导”。
+5. 在向导中检查 Alist、rclone 和 WinFsp 状态。
+6. 新建挂载方案：
+   - 使用 WebDAV 直连时，填写 WebDAV 地址、账号和密码；
+   - 使用 Alist / OpenList 时，先配置并启动 Alist，再填写对应连接信息。
+7. 选择一个未被占用的盘符，保存方案后点击“挂载”。
+8. 在 Windows 文件资源管理器中确认盘符已经出现，再开始使用。
+
+卸载时，先在配置向导中卸载正在使用的盘符，再从 Windows“应用和功能”中卸载 WindowsMountTool。是否保留挂载配置和 Alist 数据，可根据需要选择。
+
+### 独立运行
+
+也可以直接下载并运行 Release 中的 `mount_wizard.exe`。这种方式适合已有运行环境或只需要启动配置向导的情况；首次使用仍需要准备 WinFsp、Alist 和 rclone。
 
 ## 项目结构
 
+以下是 GitHub 源码仓库中实际公开的表层目录和文件：
+
 ```text
 winmount/
-├─ .gitignore                    # Git 忽略规则：排除本地配置、缓存、日志和二进制构建产物
-├─ LICENSE                       # 本项目 MIT 许可证
-├─ README.md                     # 项目介绍、构建、测试和安全说明
-├─ ui_theme.py                   # 公共 UI 主题模块
-├─ py_src/                       # 安装器 Python 源码与 PyInstaller 配置
-│  ├─ installer.py               # 安装器主程序
-│  ├─ uninstaller.py             # 卸载器程序
-│  ├─ ui_theme.py                # 安装器使用的主题模块
-│  ├─ CloudMountSetup.spec       # 安装器打包配置
-│  ├─ uninstall.spec             # 卸载器打包配置
-│  ├─ icon.ico                   # 安装器图标
-│  └─ payload/
-│     └─ THIRD_PARTY_NOTICES.txt # 随发布版本提供的第三方组件声明
-├─ py_src_wizard/                # 配置向导 Python 源码与 PyInstaller 配置
-│  ├─ app.py                     # 配置向导主程序
-│  ├─ ui_theme.py                # 向导使用的主题模块
-│  ├─ mount_wizard.spec          # 向导打包配置
-│  ├─ icon.ico                   # 向导图标
-│  └─ payload/source/
-│     ├─ assets/                 # 关于页公开资源（捐赠二维码）
-│     └─ config/rclone.conf      # 不含真实密码的 rclone 配置模板
+├─ .gitignore
+├─ LICENSE
+├─ README.md
+├─ ui_theme.py
+├─ py_src/
+└─ py_src_wizard/
 ```
 
-以下内容属于本地开发或发布环境，**不在本 GitHub 源码仓库中**：
+- `py_src/`：安装器和卸载器源码、PyInstaller 配置、安装器图标及第三方声明。
+- `py_src_wizard/`：配置向导源码、PyInstaller 配置、图标、公开页面资源和 rclone 配置模板。
+- `ui_theme.py`：公共界面主题模块。
+- `LICENSE`：本项目 MIT 许可证。
+- `README.md`：项目说明和使用方法。
 
-- 本地 `docs/` 文档、开发记录和审查报告（本地保留，但不上传 GitHub）；
-- 本地 `tests/` 测试脚本（本地保留，但不上传 GitHub）；
-- 根目录的 `CloudMountSetup.exe`、`mount_wizard.exe` 以及其他构建输出；
-- `runtime/`、`data/`、`config/`、`profiles.json` 和运行日志；
-- `_archive/`、`*_extracted/`、`build/`、`dist/` 等历史归档、解包目录和构建缓存；
-- `tools/` 下的本地构建辅助工具及 WinFsp 安装包。
-
-本地 `docs/` 和 `tests/` 目录仅供开发维护，不属于 GitHub 公开仓库。
+`docs/` 和 `tests/` 只保留在我的本地开发目录，不上传到 GitHub。运行环境、构建缓存、历史归档、日志和正式 EXE 也不放在源码仓库中。
 
 ## 从源码构建
 
-### 环境
+构建环境：
 
 - Windows 10/11 x64
 - Python 3.12 或兼容版本，并包含 Tkinter
 - PyInstaller
-- 可选：已安装 WinFsp，用于真实挂载回归测试
+- WinFsp（用于真实挂载测试）
 
-当前构建链分为两步，必须先构建配置向导，再更新安装器 payload。请注意：源码仓库不包含 Alist、rclone、WinFsp 和已构建的向导 EXE；从源码构建前，需要从 [v1.0.0 Release](https://github.com/cjm2004/WindowsMountTool/releases/tag/v1.0.0) 获取并按现有 `.spec` 文件要求放置这些运行依赖。
+源码仓库不包含 Alist、rclone、WinFsp 安装包和已构建的 EXE。需要这些文件时，请从 [v1.0.0 Release](https://github.com/cjm2004/WindowsMountTool/releases/tag/v1.0.0) 获取对应附件，并按照 `.spec` 文件中的路径准备构建环境。
+
+构建顺序：先构建配置向导，再把向导复制到安装器 payload，最后构建安装器。
 
 ```powershell
-# 1. 构建配置向导
 Set-Location py_src_wizard
 python -m PyInstaller --noconfirm mount_wizard.spec
-
-# 2. 将通过测试的配置向导复制到安装器 payload
 Copy-Item .\dist\mount_wizard.exe ..\py_src\payload\mount_wizard.exe -Force
-
-# 3. 构建安装器
 Set-Location ..\py_src
 python -m PyInstaller --noconfirm CloudMountSetup.spec
 ```
 
-构建输出：
+输出文件通常位于：
 
 ```text
 py_src_wizard\dist\mount_wizard.exe
 py_src\dist\CloudMountSetup.exe
 ```
 
-构建后应完成启动、主题切换、关于页、驱动检测、安装、挂载、卸载和正式副本校验，再将验收后的文件用于 Release。
+## 安全提示
 
-## 测试
+- 不要把真实密码、令牌、Cookie、个人 WebDAV 地址或运行日志上传到公开仓库。
+- rclone 配置中的密码应先使用 `rclone obscure` 处理。
+- WinFsp 安装后可能需要重启，挂载成功应以 Windows 文件资源管理器中出现真实盘符为准。
+- Alist / OpenList、rclone 和 WinFsp 属于第三方组件，使用时请遵守各自许可证和服务条款。
 
-测试脚本不上传到 GitHub，仅保留在本地 `tests\` 目录供开发维护。构建或二次开发时，请自行准备测试环境并验证启动、主题切换、关于页、驱动检测、安装、挂载、卸载和正式副本校验。
+## 许可证
 
-测试过程可能启动 Alist/rclone、创建计划任务、安装 WinFsp 或操作盘符，请不要在包含重要数据的正式安装环境中直接运行。
+本项目采用 [MIT License](LICENSE)。
 
-## 组件和许可证
-
-本项目自身采用 MIT License，详见 [`LICENSE`](LICENSE)。第三方组件仍受各自许可证约束。
-
-本项目使用或再分发以下第三方组件：
-
-- Alist：AGPLv3
-- rclone：GPLv3
-- WinFsp：GPLv3，含其项目许可例外条款
-- Python、Tkinter、PyInstaller、pywinstyles 等构建或运行组件
-
-发布版本随附 `THIRD_PARTY_NOTICES.txt`。源码仓库中的同名文件位于 `py_src/payload/`；Release 附件中也单独提供该文件。完整许可证和再分发条件以各组件官方项目为准。
-
-由于 Alist、rclone 和打包程序体积较大，发布版本中的二进制文件会作为 GitHub Release 附件提供，不全部放入源码提交历史。
-
-## 已知限制
-
-- WinFsp 新安装后可能需要重启 Windows，部分环境还需要重新加载文件系统驱动。
-- 真实网盘挂载依赖网络、Alist/OpenList 配置、rclone 配置和 WinFsp 状态。
-- 运行配置和日志可能含有本机路径、用户名、接口返回或远端地址，不适合直接公开。
-- 当前版本主要针对 Windows x64，尚未提供 Linux/macOS 版本。
+发布版本包含 Alist、rclone、WinFsp 等第三方组件，它们仍受各自许可证约束。第三方组件声明见 Release 附件中的 `THIRD_PARTY_NOTICES.txt`。
 
 ## 反馈问题
 
-提交 Issue 时请说明：
-
-- Windows 版本和系统架构
-- 软件版本和安装方式
-- 使用的远端类型（请隐藏账号、密码、令牌和私人地址）
-- 复现步骤
-- 相关错误信息或脱敏后的日志片段
-
-请不要上传真实的 `rclone.conf`、Alist 数据目录、个人配置文件或完整运行日志。
+如果遇到问题，请在 [Issues](https://github.com/cjm2004/WindowsMountTool/issues) 中说明 Windows 版本、软件版本、安装方式和复现步骤。提交日志或配置前，请先隐藏账号、密码、令牌、Cookie、私人地址和本机路径。
