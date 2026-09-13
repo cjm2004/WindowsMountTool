@@ -1,0 +1,27 @@
+云盘挂载向导 · 第三方开源组件声明
+============================================================
+
+本软件捆绑并使用了以下开源组件，感谢这些项目的作者与社区：
+
+WinFsp - Windows File System Proxy
+  版权所有 (C) Bill Zissimopoulos
+  许可证：GPLv3（含 FLOSS 例外条款）
+  项目地址：https://github.com/winfsp/winfsp
+  说明：用于在 Windows 中创建本地盘符。本安装程序
+  捆绑的 winfsp.msi 为官方未修改的发行版。
+
+rclone
+  版权所有 (C) 2012-2026 the rclone developers
+  许可证：GPLv3（含未修改二进制再分发例外）
+  项目地址：https://rclone.org/
+  说明：执行 WebDAV 到本地盘符的挂载。
+
+Alist
+  版权所有 (C) AList developers
+  许可证：AGPLv3
+  项目地址：https://alistgo.com/
+  说明：聚合多种网盘并提供本机 WebDAV 服务。
+
+各组件的完整许可证文本可在其官方网站或代码仓库获取。
+GPLv3 许可证文本：https://www.gnu.org/licenses/gpl-3.0.html
+AGPLv3 许可证文本：https://www.gnu.org/licenses/agpl-3.0.html

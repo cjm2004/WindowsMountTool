@@ -1,0 +1,75 @@
+# WorkBuddy local project data
+.workbuddy/
+
+# Local runtime data and user configuration
+runtime/
+data/
+config/
+profiles.json
+**/profiles.json
+**/alist-data/
+
+# Historical archives and extracted files
+_archive/
+*_extracted/
+extracted/
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# PyInstaller build intermediates and generated distributions
+build/
+**/build/
+**/build_*/
+**/dist/
+**/dist_review/
+**/dist_final/
+**/dist_about*/
+**/dist_glass*/
+*.toc
+*.pkg
+*.pyz
+
+# Release binaries are uploaded as GitHub Release assets, not source history
+*.exe
+*.msi
+!py_src/payload/THIRD_PARTY_NOTICES.txt
+
+# Local-only resource editing tool; use the official download when needed
+tools/ResourceHacker/
+tools/resource_hacker.zip
+
+# Local logs and reports that may contain machine paths
+logs/
+
+# Temporary and editor files
+*.tmp
+*.bak
+*.old
+*.swp
+*~
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Secrets and private configuration
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.p12
+
+# Keep source payload templates and public assets
+!py_src_wizard/payload/source/config/
+!py_src_wizard/payload/source/config/rclone.conf
+!py_src_wizard/payload/source/assets/
+!py_src_wizard/payload/source/assets/*.png
