@@ -31,16 +31,7 @@ Windows 云盘挂载向导：通过 Alist / OpenList、rclone 和 WinFsp，将 W
 
 也可以直接运行 `mount_wizard.exe` 进行配置，但完整安装流程建议使用安装器。
 
-### 配置安全
-
-- 不要把真实密码、令牌、Cookie 或个人 WebDAV 地址提交到公开仓库。
-- rclone 密码应使用内置 `rclone obscure` 处理后再写入配置。
-- `runtime\`、`data\`、`config\` 和运行日志可能包含本机信息或个人配置，应妥善保管。
-- 挂载成功必须以 Windows 中真实盘符出现为准，不能只依据命令返回码判断。
-
 ## 项目结构
-
-下面的结构按**本 GitHub 源码仓库实际已提交的文件**整理。正式 EXE、Alist、rclone 和 WinFsp 安装包不在源码树中，而在 [v1.0.0 Release](https://github.com/cjm2004/WindowsMountTool/releases/tag/v1.0.0) 的附件中。
 
 ```text
 winmount/
