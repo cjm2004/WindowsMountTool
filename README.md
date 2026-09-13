@@ -18,9 +18,9 @@ Windows 云盘挂载向导：通过 Alist / OpenList、rclone 和 WinFsp，将 W
 
 ## 下载和运行
 
-建议从 GitHub Releases 下载正式版本。仓库源码与发布附件分开管理：源码仓库不直接提交超过 GitHub 普通 Git 文件上限的二进制，正式程序和运行依赖放在 Release 附件中。
+建议从 GitHub Releases 下载正式版本。源码仓库与发布附件分开管理：本仓库只提交源码、测试脚本、文档、配置模板和公开资源；正式程序及 Alist、rclone、WinFsp 等运行依赖不放入 Git 历史，而是作为 Release 附件提供。
 
-1. 下载 `CloudMountSetup.exe`。
+1. 从 [Releases](https://github.com/cjm2004/WindowsMountTool/releases) 下载 `CloudMountSetup.exe`。
 2. 以普通方式启动安装器，按提示选择安装目录。
 3. 如果安装 WinFsp 后系统提示重启，请先重启 Windows。
 4. 启动安装后的“云盘挂载向导”。
@@ -38,27 +38,60 @@ Windows 云盘挂载向导：通过 Alist / OpenList、rclone 和 WinFsp，将 W
 
 ## 项目结构
 
+下面的结构按**本 GitHub 源码仓库实际已提交的文件**整理。正式 EXE、Alist、rclone 和 WinFsp 安装包不在源码树中，而在 [v1.0.0 Release](https://github.com/cjm2004/WindowsMountTool/releases/tag/v1.0.0) 的附件中。
+
 ```text
 winmount/
-├─ CloudMountSetup.exe          # 正式安装器
-├─ mount_wizard.exe             # 正式配置向导
-├─ py_src/                      # 安装器 Python 源码与 PyInstaller 配置
-│  ├─ installer.py
-│  ├─ uninstaller.py
-│  ├─ CloudMountSetup.spec
-│  ├─ uninstall.spec
-│  └─ payload/                  # 安装器内嵌的向导、WinFsp 和许可声明
-├─ py_src_wizard/               # 配置向导 Python 源码与 PyInstaller 配置
-│  ├─ app.py
-│  ├─ mount_wizard.spec
-│  └─ payload/source/           # Alist、rclone、配置模板和关于页资源
-├─ tests/                       # 安装、挂载、卸载和接口诊断脚本
-├─ docs/                        # 项目文档、开发记录和目录说明
-├─ tools/                       # WinFsp 安装包及本地构建辅助工具
-└─ logs/                        # 本地构建和测试记录，不建议直接公开
+├─ .gitignore                    # Git 忽略规则：排除本地配置、缓存、日志和二进制构建产物
+├─ LICENSE                       # 本项目 MIT 许可证
+├─ README.md                     # 项目介绍、构建、测试和安全说明
+├─ ui_theme.py                   # 公共 UI 主题模块
+├─ py_src/                       # 安装器 Python 源码与 PyInstaller 配置
+│  ├─ installer.py               # 安装器主程序
+│  ├─ uninstaller.py             # 卸载器程序
+│  ├─ test_ui.py                 # 安装器界面辅助测试
+│  ├─ ui_theme.py                # 安装器使用的主题模块
+│  ├─ CloudMountSetup.spec       # 安装器打包配置
+│  ├─ uninstall.spec             # 卸载器打包配置
+│  ├─ icon.ico                   # 安装器图标
+│  └─ payload/
+│     └─ THIRD_PARTY_NOTICES.txt # 随发布版本提供的第三方组件声明
+├─ py_src_wizard/                # 配置向导 Python 源码与 PyInstaller 配置
+│  ├─ app.py                     # 配置向导主程序
+│  ├─ ui_theme.py                # 向导使用的主题模块
+│  ├─ mount_wizard.spec          # 向导打包配置
+│  ├─ icon.ico                   # 向导图标
+│  └─ payload/source/
+│     ├─ assets/                 # 关于页公开资源（捐赠二维码）
+│     └─ config/rclone.conf      # 不含真实密码的 rclone 配置模板
+├─ tests/                        # 安装、挂载、卸载和接口诊断脚本
+│  ├─ 01_install.ps1
+│  ├─ 02_mount.ps1
+│  ├─ 03_uninstall.ps1
+│  ├─ comprehensive_test.ps1
+│  ├─ full_functional_test.ps1
+│  ├─ diag_mount.ps1
+│  └─ probe_alist_api.ps1
+└─ docs/                         # 项目文档、开发记录和目录说明
+   ├─ DEV_LOG.md
+   ├─ FIXES_PRIORITY.md
+   ├─ HOW_TO_ADD_ICON.md
+   ├─ ICON_SOLUTION.md
+   ├─ QA_REPORT.md
+   ├─ Windows挂载网盘器_优化后提示词.md
+   ├─ 目录说明.md
+   ├─ 项目文件保留与清理审查报告_2026-09-13.md
+   └─ replace_icon.txt
 ```
 
-更详细的说明请参阅 [`docs/目录说明.md`](docs/目录说明.md) 和 [`docs/项目文件保留与清理审查报告_2026-09-13.md`](docs/项目文件保留与清理审查报告_2026-09-13.md)。
+以下内容属于本地开发或发布环境，**不在本 GitHub 源码仓库中**：
+
+- 根目录的 `CloudMountSetup.exe`、`mount_wizard.exe` 以及其他构建输出；
+- `runtime/`、`data/`、`config/`、`profiles.json` 和运行日志；
+- `_archive/`、`*_extracted/`、`build/`、`dist/` 等历史归档、解包目录和构建缓存；
+- `tools/` 下的本地构建辅助工具及 WinFsp 安装包。
+
+更详细的本地目录边界说明请参阅 [`docs/目录说明.md`](docs/目录说明.md)。
 
 ## 从源码构建
 
@@ -69,7 +102,7 @@ winmount/
 - PyInstaller
 - 可选：已安装 WinFsp，用于真实挂载回归测试
 
-当前构建链分为两步，必须先构建配置向导，再更新安装器 payload：
+当前构建链分为两步，必须先构建配置向导，再更新安装器 payload。请注意：源码仓库不包含 Alist、rclone、WinFsp 和已构建的向导 EXE；从源码构建前，需要从 [v1.0.0 Release](https://github.com/cjm2004/WindowsMountTool/releases/tag/v1.0.0) 获取并按现有 `.spec` 文件要求放置这些运行依赖。
 
 ```powershell
 # 1. 构建配置向导
@@ -118,7 +151,7 @@ py_src\dist\CloudMountSetup.exe
 - WinFsp：GPLv3，含其项目许可例外条款
 - Python、Tkinter、PyInstaller、pywinstyles 等构建或运行组件
 
-发布版本随附 `py_src/payload/THIRD_PARTY_NOTICES.txt`。完整许可证和再分发条件以各组件官方项目为准。项目本身的许可证尚未在本仓库中单独声明；如需允许他人修改和再分发，请在发布前选择并添加合适的项目许可证文件。
+发布版本随附 `THIRD_PARTY_NOTICES.txt`。源码仓库中的同名文件位于 `py_src/payload/`；Release 附件中也单独提供该文件。完整许可证和再分发条件以各组件官方项目为准。
 
 由于 Alist、rclone 和打包程序体积较大，发布版本中的二进制文件会作为 GitHub Release 附件提供，不全部放入源码提交历史。
 
