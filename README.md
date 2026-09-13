@@ -15,6 +15,8 @@ Windows 云盘挂载向导：通过 Alist / OpenList、rclone 和 WinFsp，将 W
 - 支持开机自启和健康检查。
 - 安装器可释放 Alist、rclone 和 WinFsp 相关资源。
 - 配置向导提供暗色/浅色主题和“关于”页面。
+<img width="1352" height="940" alt="image" src="https://github.com/user-attachments/assets/196323ab-c494-4d0e-8ca4-dfdfaeccdb72" />
+<img width="716" height="520" alt="image" src="https://github.com/user-attachments/assets/2530b419-8665-4663-a65f-93024df14919" />
 
 ## 下载和运行
 
