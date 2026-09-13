@@ -20,7 +20,7 @@ Windows 云盘挂载向导：通过 Alist / OpenList、rclone 和 WinFsp，将 W
 
 ## 下载和运行
 
-建议从 GitHub Releases 下载正式版本。源码仓库与发布附件分开管理：本仓库只提交源码、测试脚本、文档、配置模板和公开资源；正式程序及 Alist、rclone、WinFsp 等运行依赖不放入 Git 历史，而是作为 Release 附件提供。
+建议从 GitHub Releases 下载正式版本。源码仓库与发布附件分开管理：本仓库只提交源码、配置模板和公开资源；正式程序及 Alist、rclone、WinFsp 等运行依赖不放入 Git 历史，而是作为 Release 附件提供。
 
 1. 从 [Releases](https://github.com/cjm2004/WindowsMountTool/releases) 下载 `CloudMountSetup.exe`。
 2. 以普通方式启动安装器，按提示选择安装目录。
@@ -42,7 +42,6 @@ winmount/
 ├─ py_src/                       # 安装器 Python 源码与 PyInstaller 配置
 │  ├─ installer.py               # 安装器主程序
 │  ├─ uninstaller.py             # 卸载器程序
-│  ├─ test_ui.py                 # 安装器界面辅助测试
 │  ├─ ui_theme.py                # 安装器使用的主题模块
 │  ├─ CloudMountSetup.spec       # 安装器打包配置
 │  ├─ uninstall.spec             # 卸载器打包配置
@@ -57,34 +56,18 @@ winmount/
 │  └─ payload/source/
 │     ├─ assets/                 # 关于页公开资源（捐赠二维码）
 │     └─ config/rclone.conf      # 不含真实密码的 rclone 配置模板
-├─ tests/                        # 安装、挂载、卸载和接口诊断脚本
-│  ├─ 01_install.ps1
-│  ├─ 02_mount.ps1
-│  ├─ 03_uninstall.ps1
-│  ├─ comprehensive_test.ps1
-│  ├─ full_functional_test.ps1
-│  ├─ diag_mount.ps1
-│  └─ probe_alist_api.ps1
-└─ docs/                         # 项目文档、开发记录和目录说明
-   ├─ DEV_LOG.md
-   ├─ FIXES_PRIORITY.md
-   ├─ HOW_TO_ADD_ICON.md
-   ├─ ICON_SOLUTION.md
-   ├─ QA_REPORT.md
-   ├─ Windows挂载网盘器_优化后提示词.md
-   ├─ 目录说明.md
-   ├─ 项目文件保留与清理审查报告_2026-09-13.md
-   └─ replace_icon.txt
 ```
 
 以下内容属于本地开发或发布环境，**不在本 GitHub 源码仓库中**：
 
+- 本地 `docs/` 文档、开发记录和审查报告（本地保留，但不上传 GitHub）；
+- 本地 `tests/` 测试脚本（本地保留，但不上传 GitHub）；
 - 根目录的 `CloudMountSetup.exe`、`mount_wizard.exe` 以及其他构建输出；
 - `runtime/`、`data/`、`config/`、`profiles.json` 和运行日志；
 - `_archive/`、`*_extracted/`、`build/`、`dist/` 等历史归档、解包目录和构建缓存；
 - `tools/` 下的本地构建辅助工具及 WinFsp 安装包。
 
-更详细的本地目录边界说明请参阅 [`docs/目录说明.md`](docs/目录说明.md)。
+本地 `docs/` 和 `tests/` 目录仅供开发维护，不属于 GitHub 公开仓库。
 
 ## 从源码构建
 
@@ -121,17 +104,9 @@ py_src\dist\CloudMountSetup.exe
 
 ## 测试
 
-测试脚本位于 `tests\`：
+测试脚本不上传到 GitHub，仅保留在本地 `tests\` 目录供开发维护。构建或二次开发时，请自行准备测试环境并验证启动、主题切换、关于页、驱动检测、安装、挂载、卸载和正式副本校验。
 
-- `01_install.ps1`：安装测试
-- `02_mount.ps1`：挂载测试
-- `03_uninstall.ps1`：卸载测试
-- `comprehensive_test.ps1`：综合测试
-- `full_functional_test.ps1`：完整功能测试
-- `diag_mount.ps1`：挂载诊断
-- `probe_alist_api.ps1`：Alist 管理接口探测
-
-部分测试会启动 Alist/rclone、创建计划任务、安装 WinFsp 或操作盘符。请先确认测试目标目录，并不要在包含重要数据的正式安装环境中直接运行。
+测试过程可能启动 Alist/rclone、创建计划任务、安装 WinFsp 或操作盘符，请不要在包含重要数据的正式安装环境中直接运行。
 
 ## 组件和许可证
 
