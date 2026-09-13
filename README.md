@@ -14,6 +14,12 @@ WindowsMountTool 由安装器和配置向导组成：
 - 支持挂载、卸载、状态检查、日志查看、健康检查和开机自启。
 - 配置向导内置驱动状态检查、管理后台入口、主题切换和关于页面。
 
+![云盘挂载向导控制台](screenshots/console.png)
+
+![挂载后出现在文件资源管理器中的盘符](screenshots/drives.png)
+
+![安装程序](screenshots/installer.png)
+
 ## 下载与运行
 
 请前往 [GitHub Releases](https://github.com/cjm2004/WindowsMountTool/releases) 下载最新版本。目前提供 `v1.0.0` 正式版。
@@ -48,11 +54,13 @@ winmount/
 ├─ README.md
 ├─ ui_theme.py
 ├─ py_src/
-└─ py_src_wizard/
+├─ py_src_wizard/
+└─ screenshots/
 ```
 
 - `py_src/`：安装器和卸载器源码、PyInstaller 配置、安装器图标及第三方声明。
 - `py_src_wizard/`：配置向导源码、PyInstaller 配置、图标、公开页面资源和 rclone 配置模板。
+- `screenshots/`：README 中使用的界面截图。
 - `ui_theme.py`：公共界面主题模块。
 - `LICENSE`：本项目 MIT 许可证。
 - `README.md`：项目说明和使用方法。
