@@ -1,6 +1,0 @@
-[FILENAMES]
-Exe=dist\CloudMountSetup.exe
-SaveAs=dist\CloudMountSetup.exe
-Log=logs\resource_hacker_script.log
-[COMMANDS]
--addoverwrite source\icon.ico, ICONGROUP,1,
